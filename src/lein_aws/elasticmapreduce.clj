@@ -33,6 +33,19 @@
             (do (println (emr/describe-job-flows :job-flow-ids [id]))
                 (println (format "job-flow %s has entered the Waiting state." id)))))))))
 
+(defn add-job-flow-steps
+  [project job-flow-id step-name path]
+  (when-let [config (:aws project)]
+    (with-credential [(:access-key config) (:secret-key config)]
+      (let [job-steps (parse-flow path)
+            step-name (keyword step-name)
+            step (get job-steps step-name)
+            new-step (assoc step :job-flow-id job-flow-id)]
+        (do
+          (emr/add-job-flow-steps new-step)
+          (println (format "Added step to job-flow %s `%s'"
+                           job-flow-id new-step)))))))
+
 (defn terminate-flow
   "Terminate the elastic mapreduce jobflows `ids`"
   [project & ids]
