@@ -53,3 +53,10 @@
     (with-credential [(:access-key config) (:secret-key config)]
       (emr/terminate-job-flows :job-flow-ids (vec ids)))
     (println "job flow(s) terminated")))
+
+(defn describe-job-flows
+  "Describe the elastic mapreduce jobflows `ids`"
+  [project & ids]
+  (let [config (:aws project)]
+    (with-credential [(:access-key config) (:secret-key config)]
+      (pprint (emr/describe-job-flows :job-flow-ids (vec ids))))))
