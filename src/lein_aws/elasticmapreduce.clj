@@ -35,8 +35,8 @@
 
 (defn terminate-flow
   "Terminate the elastic mapreduce jobflows `ids`"
-  [project ids]
+  [project & ids]
   (let [config (:aws project)]
     (with-credential [(:access-key config) (:secret-key config)]
-      (terminate-job-flows :job-flow-ids (vec ids)))
+      (emr/terminate-job-flows :job-flow-ids (vec ids)))
     (println "job flow(s) terminated")))
